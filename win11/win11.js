@@ -22,20 +22,21 @@
     /* If you drop your own wallpaper next to index.html it is used instead.
        Nothing copyrighted ships with the site; this just reads a local file
        if one happens to be there. */
-    /* A supplied image is handed to the compositor as a CSS background so it
-       is scaled at native quality instead of being resampled into canvas. */
-    ['wallpaper.webp', 'wallpaper.jpg', 'wallpaper.png'].forEach(function (src) {
+    /* window.WALLPAPER is written at build time — the filename if one sits
+       next to index.html, otherwise null. Handing it to the compositor as a
+       CSS background keeps it at native quality, and a build with no
+       wallpaper makes no request at all. */
+    if (window.WALLPAPER) {
       var im = new Image();
       im.onload = function () {
-        if (photo) return;
-        photo = src;
+        photo = window.WALLPAPER;
         var layer = $('#wall-photo');
-        layer.style.backgroundImage = 'url("' + src + '")';
+        layer.style.backgroundImage = 'url("' + window.WALLPAPER + '")';
         layer.classList.add('on');
         c.style.display = 'none';
       };
-      im.src = src;
-    });
+      im.src = window.WALLPAPER;
+    }
 
     function paint() {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);

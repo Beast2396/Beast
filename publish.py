@@ -8,7 +8,7 @@ Beast is the site; the other designs stay reachable at their own paths.
 Nothing copyrighted is copied — wallpaper.* is deliberately excluded, so a
 deployed BEast falls back to its drawn wallpaper.
 """
-import os, shutil
+import os, re, shutil
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(ROOT, "docs")
@@ -20,12 +20,23 @@ PAGES = [
     ("win95/index.html",    "win95/index.html"),
 ]
 
+def deployable(html):
+    """The wallpaper is never deployed, so a build made on a machine that has
+    one would point at a file that isn't there — three 404s in the console.
+    Null it out on the way into docs/ and the drawn wallpaper is used."""
+    return re.sub(r'window\.WALLPAPER=(?:"[^"]*"|null);',
+                  "window.WALLPAPER=null;", html)
+
+
 shutil.rmtree(DOCS, ignore_errors=True)
 for src, dst in PAGES:
     s = os.path.join(ROOT, src)
     d = os.path.join(DOCS, dst)
     os.makedirs(os.path.dirname(d), exist_ok=True)
-    shutil.copyfile(s, d)
+    with open(s, encoding="utf-8") as fh:
+        html = deployable(fh.read())
+    with open(d, "w", encoding="utf-8") as fh:
+        fh.write(html)
     print(f"  {src:22} -> docs/{dst}")
 
 # the résumé sits at the site root; every design links to it absolutely

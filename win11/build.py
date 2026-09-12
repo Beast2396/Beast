@@ -8,6 +8,14 @@ CSS = open("win11.css", encoding="utf-8").read()
 CONTENT = open("../content.js", encoding="utf-8").read()
 APP = open("win11.js", encoding="utf-8").read().replace("SKK 11", SHELL)
 
+# Detect a local wallpaper at build time instead of probing three URLs at
+# runtime: a deployed build has none, so it makes no request at all rather
+# than logging three 404s in the console.
+WALLPAPER = next((f for f in ("wallpaper.webp", "wallpaper.jpg", "wallpaper.png")
+                  if os.path.exists(f)), None)
+WALLPAPER_JS = "window.WALLPAPER=" + ('"%s"' % WALLPAPER if WALLPAPER else "null") + ";"
+print("wallpaper:", WALLPAPER or "none (the drawn one will be used)")
+
 HEAD = '''<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">'''
 
@@ -42,6 +50,7 @@ BODY = '''<div id="wall-photo" aria-hidden="true"></div>
   <div id="tray"><b id="clock">--:--</b><b id="date"></b></div>
 </div>
 
+<script>''' + WALLPAPER_JS + '''</script>
 <script>''' + CONTENT + '''</script>
 <script>''' + APP + '''</script>'''
 
@@ -52,6 +61,7 @@ open("index.html", "w", encoding="utf-8").write(f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230E1216%22%2F%3E%3Cpath%20d%3D%22M16%205%206%209v7c0%206.4%204.3%2010.6%2010%2012%205.7-1.4%2010-5.6%2010-12V9z%22%20fill%3D%22%23E8443F%22%2F%3E%3Cpath%20d%3D%22M11.4%2016.2l3.2%203.2%206-6.6%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{SHELL} — Srinivas Koushik Kodukula</title>
 <meta name="description" content="The portfolio of Srinivas Koushik Kodukula, application and cloud security, presented as a desktop. Four verified credentials and published IEEE research.">
