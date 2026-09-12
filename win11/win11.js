@@ -143,6 +143,15 @@
       '<path d="M3 8a2 2 0 0 1 2-2h7l3 3h10a2 2 0 0 1 2 2v3H3z" fill="url(#gf)"/>' +
       '<path d="M3 12h26v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="url(#gf2)"/>' +
       '<path d="M3 12h26v2H3z" fill="rgba(255,255,255,.5)"/>',
+    stack:
+      '<defs><linearGradient id="gst" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0" stop-color="#4FE0B8"/><stop offset="1" stop-color="#0C8A70"/></linearGradient>' +
+      '<linearGradient id="gst2" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0" stop-color="#2FB795"/><stop offset="1" stop-color="#0A6B57"/></linearGradient></defs>' +
+      '<path d="M16 20.5 3.5 14.2l2.6-1.3L16 18l9.9-5.1 2.6 1.3z" fill="url(#gst2)"/>' +
+      '<path d="M16 26 3.5 19.7l2.6-1.3L16 23.5l9.9-5.1 2.6 1.3z" fill="url(#gst2)" opacity=".72"/>' +
+      '<path d="M16 4.2 29 11l-13 6.8L3 11z" fill="url(#gst)"/>' +
+      '<path d="M16 4.2 29 11l-13 6.8z" fill="rgba(255,255,255,.18)"/>',
     cert:
       '<defs><linearGradient id="gc" x1="0" y1="0" x2="1" y2="1">' +
       '<stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#D8DEE8"/></linearGradient></defs>' +
@@ -284,7 +293,7 @@
     { id: 'resume',   icon: 'doc',    title: 'Résumé',       w: 660, h: 570, x: 250, y: 84,  body: resumeDoc },
     { id: 'certs',    icon: 'folder', title: 'Certificates', w: 560, h: 350, x: 790, y: 360, body: certsFolder, pad0: true,
       status: function () { return S.certifications.length + ' items'; } },
-    { id: 'projects', icon: 'folder', title: 'Projects',     w: 660, h: 520, x: 300, y: 130, body: projectsDoc,
+    { id: 'projects', icon: 'stack',  title: 'Projects',     w: 660, h: 520, x: 300, y: 130, body: projectsDoc,
       status: function () { return S.projects.length + ' projects'; } },
     { id: 'research', icon: 'pdf',    title: 'Research',     w: 620, h: 410, x: 330, y: 200, body: researchDoc },
     { id: 'contact',  icon: 'mail',   title: 'Contact',      w: 560, h: 400, x: 420, y: 240, body: contactDoc, pad0: true },
