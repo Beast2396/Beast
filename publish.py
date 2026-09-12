@@ -28,6 +28,10 @@ for src, dst in PAGES:
     shutil.copyfile(s, d)
     print(f"  {src:22} -> docs/{dst}")
 
+# the résumé sits at the site root; every design links to it absolutely
+shutil.copyfile(os.path.join(ROOT, "resume.pdf"), os.path.join(DOCS, "resume.pdf"))
+print("  resume.pdf             -> docs/resume.pdf")
+
 # tell Pages not to run the built output through Jekyll
 open(os.path.join(DOCS, ".nojekyll"), "w").close()
 

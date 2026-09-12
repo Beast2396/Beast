@@ -208,12 +208,14 @@
     return '<div class="doc"><h2>Résumé</h2><p class="sub">' + esc(O.name) + '</p><div class="sep"></div>' +
       '<h3>Education</h3>' + S.education.map(function (e) {
         return '<dl><dt>' + esc(e.period) + '</dt><dd><b>' + esc(e.qualification) + '</b><br>' +
-          esc(e.org) + (e.grade ? '<br>' + esc(e.grade) : '') + '</dd></dl>';
+          esc(e.org) + (e.grade ? '<br>' + esc(e.grade) : '') +
+          (e.detail ? '<br>' + esc(e.detail) : '') + '</dd></dl>';
       }).join('') +
       '<h3>Experience</h3>' + S.experience.map(function (x) {
-        return '<dl><dt>' + esc(x.meta) + '</dt><dd><b>' + esc(x.org) + '</b>' +
-          '<ul class="bul">' + x.roles.map(function (r) {
-            return '<li>' + esc(r.title) + ' &mdash; ' + esc(r.period) + '</li>'; }).join('') +
+        return '<dl><dt>' + esc(x.meta) + '</dt><dd><b>' + esc(x.org) + '</b><br>' +
+          x.roles.map(function (r) { return esc(r.title); }).join(' · ') +
+          '<ul class="bul">' + (x.points || []).map(function (p) {
+            return '<li>' + esc(p) + '</li>'; }).join('') +
           '</ul></dd></dl>';
       }).join('') +
       '<h3>Certifications</h3><ul class="chips">' +
@@ -230,6 +232,19 @@
         esc(c.title) + '">' + inner + '</a>' : '<div class="gitem">' + inner + '</div>';
     }).join('') + '</div>';
   }
+  function projectsDoc() {
+    return '<div class="doc"><h2>Projects</h2>' +
+      '<p class="sub">' + S.projects.length + ' selected builds</p><div class="sep"></div>' +
+      S.projects.map(function (p, i) {
+        return (i ? '<div class="sep"></div>' : '') +
+          '<h3 style="margin-top:0">' + esc(p.title) + '</h3>' +
+          '<p class="sub">' + esc(p.tag) + '</p>' +
+          '<p>' + esc(p.body) + '</p>' +
+          '<ul class="chips">' + p.metrics.map(function (m) {
+            return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>';
+      }).join('') + '</div>';
+  }
+
   function researchDoc() {
     var p = S.publications[0];
     return '<div class="doc"><h2>' + esc(p.title) + '</h2>' +
@@ -259,6 +274,7 @@
       '<dt>Discipline</dt><dd>' + esc(O.discipline) + '</dd>' +
       '<dt>Institution</dt><dd>' + esc(S.education[0].org) + '</dd>' +
       '<dt>Credentials</dt><dd>' + S.certifications.map(function (c) { return esc(c.code); }).join(' · ') + '</dd>' +
+      '<dt>Projects</dt><dd>' + S.projects.length + '</dd>' +
       '<dt>Publications</dt><dd>' + S.publications.length + ' (' + esc(S.publications[0].venue) + ')</dd>' +
       '<dt>Status</dt><dd>' + esc(O.status) + '</dd></dl></div>';
   }
@@ -268,12 +284,14 @@
     { id: 'resume',   icon: 'doc',    title: 'Résumé',       w: 660, h: 570, x: 250, y: 84,  body: resumeDoc },
     { id: 'certs',    icon: 'folder', title: 'Certificates', w: 560, h: 350, x: 790, y: 360, body: certsFolder, pad0: true,
       status: function () { return S.certifications.length + ' items'; } },
+    { id: 'projects', icon: 'folder', title: 'Projects',     w: 660, h: 520, x: 300, y: 130, body: projectsDoc,
+      status: function () { return S.projects.length + ' projects'; } },
     { id: 'research', icon: 'pdf',    title: 'Research',     w: 620, h: 410, x: 330, y: 200, body: researchDoc },
     { id: 'contact',  icon: 'mail',   title: 'Contact',      w: 560, h: 400, x: 420, y: 240, body: contactDoc, pad0: true },
     { id: 'system',   icon: 'pc',     title: 'Settings',     w: 540, h: 400, x: 820, y: 56,  body: systemDoc }
   ];
   var byId = {}; APPS.forEach(function (a) { byId[a.id] = a; });
-  var ORDER = ['about', 'resume', 'certs', 'research', 'contact', 'system'];
+  var ORDER = ['about', 'resume', 'projects', 'certs', 'research', 'contact', 'system'];
 
   /* ── desktop icons ─────────────────────────────────────────────────── */
   $('#icons').innerHTML = ORDER.map(function (id) {

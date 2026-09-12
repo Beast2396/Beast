@@ -50,10 +50,11 @@ BODY = f'''<header class="topbar" id="topbar">
          '      <div class="sec-bar" style="margin-top:44px"><span class="sec-n">02.1</span>'
          '<div><h2 class="sec-t">Education</h2></div></div>\n'
          '      <div class="entries" id="edu-list"></div>')}
-{section('03', 'research', 'Published work', None, '      <div class="entries" id="research-list"></div>')}
-{section('04', 'certs', 'Certifications', 'cert-note', '      <div class="entries" id="cert-list"></div>')}
-{section('05', 'toolkit', 'Toolkit', None, '      <div class="kit" id="kit"></div>')}
-{section('06', 'writing', 'Notes &amp; writeups', None, '      <div class="entries" id="writing-list"></div>')}
+{section('03', 'projects', 'Projects', None, '      <div class="entries" id="projects-list"></div>')}
+{section('04', 'research', 'Published work', None, '      <div class="entries" id="research-list"></div>')}
+{section('05', 'certs', 'Certifications', 'cert-note', '      <div class="entries" id="cert-list"></div>')}
+{section('06', 'toolkit', 'Toolkit', None, '      <div class="kit" id="kit"></div>')}
+{section('07', 'writing', 'Notes &amp; writeups', None, '      <div class="entries" id="writing-list"></div>')}
 
   <section id="contact">
     <div class="wrap">

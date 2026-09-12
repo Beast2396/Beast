@@ -97,9 +97,10 @@
       }).join('') +
       '<h3>Experience</h3>' +
       S.experience.map(function (x) {
-        return '<dl><dt>' + esc(x.meta) + '</dt><dd><b>' + esc(x.org) + '</b>' +
-          '<ul class="bul">' + x.roles.map(function (r) {
-            return '<li><span>' + esc(r.title) + ' &mdash; ' + esc(r.period) + '</span></li>';
+        return '<dl><dt>' + esc(x.meta) + '</dt><dd><b>' + esc(x.org) + '</b> &mdash; ' +
+          x.roles.map(function (r) { return esc(r.title); }).join(' · ') +
+          '<ul class="bul">' + (x.points || []).map(function (p) {
+            return '<li><span>' + esc(p) + '</span></li>';
           }).join('') + '</ul></dd></dl>';
       }).join('') +
       '<h3>Certifications</h3>' +
@@ -121,6 +122,18 @@
           'title="' + esc(c.title) + '">' + art('cert') + label + '</a>'
         : '<span class="fitem" title="' + esc(c.title) + '">' + art('cert') + label + '</span>';
     }).join('') + '</div>';
+  }
+
+  function projectsDoc() {
+    return '<div class="doc"><h2>Projects</h2>' +
+      '<p class="sub">' + S.projects.length + ' selected builds</p><span class="rule"></span>' +
+      S.projects.map(function (p, i) {
+        return (i ? '<span class="rule"></span>' : '') +
+          '<h3 style="margin-top:0">' + esc(p.title) + '</h3>' +
+          '<p class="sub">' + esc(p.tag) + '</p><p>' + esc(p.body) + '</p>' +
+          '<ul class="chips">' + p.metrics.map(function (m) {
+            return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>';
+      }).join('') + '</div>';
   }
 
   function researchDoc() {
@@ -183,7 +196,7 @@
   APPS.forEach(function (a) { byId[a.id] = a; });
 
   /* ── desktop icons ─────────────────────────────────────────────────── */
-  var DESKTOP = ['about', 'resume', 'certs', 'research', 'contact', 'system'];
+  var DESKTOP = ['about', 'resume', 'projects', 'certs', 'research', 'contact', 'system'];
   $('#icons').innerHTML = DESKTOP.map(function (id) {
     var a = byId[id];
     return '<button class="icon" data-open="' + id + '">' + art(a.icon) + '<span>' + esc(a.title) + '</span></button>';

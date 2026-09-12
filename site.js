@@ -45,8 +45,8 @@
   /* ── top bar ───────────────────────────────────────────────────────── */
   $('#sig').innerHTML = 'S.K.KODUKULA<b> //</b> SEC';
   $('#nav').innerHTML = [
-    ['01', 'Focus', '#focus'], ['02', 'Work', '#work'], ['03', 'Research', '#research'],
-    ['04', 'Certs', '#certs'], ['05', 'Contact', '#contact']
+    ['01', 'Focus', '#focus'], ['02', 'Work', '#work'], ['03', 'Projects', '#projects'],
+    ['04', 'Research', '#research'], ['05', 'Certs', '#certs'], ['06', 'Contact', '#contact']
   ].map(function (n) {
     return '<a href="' + n[2] + '"><i>' + n[0] + '</i>' + n[1] + '</a>';
   }).join('');
@@ -91,14 +91,15 @@
   /* ── 02 work ───────────────────────────────────────────────────────── */
   $('#work-list').innerHTML = S.experience.map(function (x, i) {
     return entry({
-      id: pad(i + 1) + ' / INTERNSHIP',
+      id: pad(i + 1) + ' / ROLE',
       meta: esc(x.meta).replace(/ · /g, '<br>'),
       title: esc(x.org),
-      todo: x.needDetail,
-      extra: '<ul class="stints">' + x.roles.map(function (r) {
-        return '<li><span class="stint-t">' + esc(r.title) + '</span>' +
-               '<span class="stint-p">' + esc(r.period) + '</span></li>';
-      }).join('') + '</ul>'
+      sub: x.roles.map(function (r) { return r.title; }).join(' · '),
+      extra: '<ul class="tags" style="flex-direction:column;gap:8px;align-items:flex-start">' +
+        (x.points || []).map(function (p) {
+          return '<li style="color:var(--ink-2);font-family:var(--f-body);font-size:14.5px;' +
+                 'letter-spacing:0">' + esc(p) + '</li>';
+        }).join('') + '</ul>'
     });
   }).join('');
 
@@ -108,7 +109,21 @@
       meta: esc(e.period),
       title: esc(e.qualification),
       sub: e.org,
-      body: e.grade
+      body: e.grade + (e.detail ? ' — ' + e.detail : '')
+    });
+  }).join('');
+
+  /* ── projects ──────────────────────────────────────────────────────── */
+  $('#projects-list').innerHTML = S.projects.map(function (p, i) {
+    return entry({
+      id: pad(i + 1) + ' / BUILD',
+      meta: esc(p.tag),
+      title: esc(p.title),
+      body: p.body,
+      extra: '<ul class="tags">' + p.metrics.map(function (m) {
+        return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>',
+      href: p.href,
+      link: p.href ? { label: 'View', icon: 'out' } : null
     });
   }).join('');
 
@@ -148,7 +163,13 @@
   }).join('');
 
   /* ── 06 writing ────────────────────────────────────────────────────── */
-  $('#writing-list').innerHTML = S.writing.map(function (w, i) {
+  if (!S.writing.length) {
+    var ws = document.getElementById('writing');
+    if (ws) ws.remove();
+    var wn = document.querySelector('a[href="#writing"]');
+    if (wn) wn.remove();
+  }
+  $('#writing-list').innerHTML = (S.writing || []).map(function (w, i) {
     return entry({
       id: pad(i + 1) + ' / ' + w.tag.toUpperCase(),
       meta: esc(w.date),

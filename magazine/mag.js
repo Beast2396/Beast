@@ -35,11 +35,13 @@
       note: S.certifications.length + ' entries' },
     { folio: '04', id: 'research', title: 'Research',
       note: S.publications[0].venue + ' ' + S.publications[0].date.replace(/^\w+ /, '') },
-    { folio: '06', id: 'practice', title: 'Practice',
+    { folio: '06', id: 'projects', title: 'Projects',
+      note: S.projects.length + ' builds' },
+    { folio: '08', id: 'practice', title: 'Practice',
       note: S.capabilities.length + ' departments' },
-    { folio: '08', id: 'record', title: 'Education & experience',
+    { folio: '10', id: 'record', title: 'Education & experience',
       note: S.education.length + ' degrees' },
-    { folio: '10', id: 'contact', title: 'Contact', note: O.status.indexOf('Open') === 0 ? 'Open' : '' }
+    { folio: '12', id: 'contact', title: 'Contact', note: O.status.indexOf('Open') === 0 ? 'Open' : '' }
   ];
 
   /* ── cover ─────────────────────────────────────────────────────────── */
@@ -90,7 +92,19 @@
   $('#research-pull').textContent =
     'Vehicular networks fail quietly: a grey-hole node forwards enough traffic to look healthy while dropping the rest.';
 
-  /* ── 06 practice ───────────────────────────────────────────────────── */
+  /* ── 06 projects ───────────────────────────────────────────────────── */
+  $('#projects-list').innerHTML = S.projects.map(function (p, i) {
+    return '<article class="item">' +
+      '<div class="item-side"><span class="k">' + (i + 1 < 10 ? '0' : '') + (i + 1) + '</span>' +
+      '<span class="v">' + esc(p.tag) + '</span></div>' +
+      '<div><h3>' + esc(p.title) + '</h3>' +
+      '<p>' + esc(p.body) + '</p>' +
+      '<ul class="tags" style="margin-top:14px">' + p.metrics.map(function (m) {
+        return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>' +
+      '</div></article>';
+  }).join('');
+
+  /* ── 08 practice ───────────────────────────────────────────────────── */
   $('#practice-list').innerHTML = S.capabilities.map(function (c) {
     return '<div><h4>' + esc(c.title) + '</h4><p>' + esc(c.body) + '</p>' +
       '<ul class="tags">' + c.tags.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') +
@@ -106,7 +120,8 @@
     S.education.map(function (e) {
       return '<div class="rec-row"><div class="rec-when">' + esc(e.period) + '</div>' +
         '<div><div class="rec-what"><b>' + esc(e.qualification) + '</b></div>' +
-        '<div class="rec-where">' + esc(e.org) + '</div></div>' +
+        '<div class="rec-where">' + esc(e.org) +
+        (e.detail ? '<br>' + esc(e.detail) : '') + '</div></div>' +
         '<div class="rec-note">' + esc(e.grade || '') + '</div></div>';
     }).join('') +
     S.experience.map(function (x) {

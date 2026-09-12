@@ -72,10 +72,24 @@ BODY = '''<header class="cover">
     </div>
   </section>
 
-  <section class="page" id="practice">
+  <section class="page" id="projects">
     <div class="sheet">
       <div class="page-head">
         <span class="folio">06</span>
+        <div>
+          <h2 class="page-title">Projects</h2>
+          <p class="page-note">Three selected builds — published research, cloud
+            architecture, and applied AI.</p>
+        </div>
+      </div>
+      <div class="spread"><span></span><div id="projects-list"></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="practice">
+    <div class="sheet">
+      <div class="page-head">
+        <span class="folio">08</span>
         <div>
           <h2 class="page-title">Practice</h2>
           <p class="page-note">What I work on, and what I work with.</p>
@@ -88,7 +102,7 @@ BODY = '''<header class="cover">
   <section class="page" id="record">
     <div class="sheet">
       <div class="page-head">
-        <span class="folio">08</span>
+        <span class="folio">10</span>
         <div>
           <h2 class="page-title">Education &amp; experience</h2>
         </div>
@@ -100,7 +114,7 @@ BODY = '''<header class="cover">
   <section class="colophon" id="contact">
     <div class="sheet">
       <div class="page-head">
-        <span class="folio">10</span>
+        <span class="folio">12</span>
         <div>
           <h2 class="page-title">Contact</h2>
           <p class="page-note">Open to security internships and new-grad roles in
