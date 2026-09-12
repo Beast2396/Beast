@@ -729,13 +729,16 @@ window.SITE = {
   }).join('');
 
   /* ── 06 writing ────────────────────────────────────────────────────── */
+  /* no posts yet: drop the section and its nav entry rather than leaving a
+     hole — and return before writing into an element that no longer exists */
   if (!S.writing.length) {
     var ws = document.getElementById('writing');
     if (ws) ws.remove();
     var wn = document.querySelector('a[href="#writing"]');
     if (wn) wn.remove();
   }
-  $('#writing-list').innerHTML = (S.writing || []).map(function (w, i) {
+  var writingHost = $('#writing-list');
+  if (writingHost) writingHost.innerHTML = (S.writing || []).map(function (w, i) {
     return entry({
       id: pad(i + 1) + ' / ' + w.tag.toUpperCase(),
       meta: esc(w.date),

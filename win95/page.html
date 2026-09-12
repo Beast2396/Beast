@@ -714,6 +714,8 @@ window.SITE = {
     /* opens clear of About Me so the desktop reads as two real windows */
     { id: 'certs',    icon: 'folder', title: 'Certificates',    w: 430, h: 268, x: 690, y: 330, body: certsFolder, grey: true,
       status: function () { return S.certifications.length + ' object(s)'; } },
+    { id: 'projects', icon: 'stack',  title: 'Projects',        w: 560, h: 420, x: 250, y: 130, body: projectsDoc,
+      status: function () { return S.projects.length + ' object(s)'; } },
     { id: 'research', icon: 'pdf',    title: 'Research.pdf',    w: 500, h: 330, x: 330, y: 200, body: researchDoc },
     { id: 'contact',  icon: 'mail',   title: 'Contact',         w: 440, h: 310, x: 400, y: 250, body: contactDoc },
     { id: 'system',   icon: 'pc',     title: 'My Computer',     w: 400, h: 300, x: 700, y: 52,  body: systemDoc, grey: true }
@@ -723,6 +725,10 @@ window.SITE = {
 
   /* ── desktop icons ─────────────────────────────────────────────────── */
   var DESKTOP = ['about', 'resume', 'projects', 'certs', 'research', 'contact', 'system'];
+  DESKTOP.forEach(function (id) {
+    if (!byId[id]) throw new Error('Unknown app in DESKTOP: ' + id);
+  });
+
   $('#icons').innerHTML = DESKTOP.map(function (id) {
     var a = byId[id];
     return '<button class="icon" data-open="' + id + '">' + art(a.icon) + '<span>' + esc(a.title) + '</span></button>';
