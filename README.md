@@ -7,14 +7,16 @@ Cybersecurity MEng candidate at the University of Maryland.
 
 ## Designs
 
+**Beast** is the deployed site. Three alternates live in the repo but are not
+published — add them back to `PAGES` in `publish.py` to serve them again.
 All four read from a single `content.js`, so a fact is edited once.
 
-| Path | Design |
-| --- | --- |
-| `/` | **Beast** — the portfolio as a Windows 11 desktop |
-| `/annotated/` | Editorial margin rails and hairlines |
-| `/magazine/` | *The AppSec File* — a technical journal issue |
-| `/win95/` | The same desktop idea, Windows 95 |
+| Design | Deployed | Source |
+| --- | --- | --- |
+| **Beast** — the portfolio as a Windows 11 desktop | `/` | `win11/` |
+| Annotated — editorial margin rails and hairlines | — | project root |
+| *The AppSec File* — a technical journal issue | — | `magazine/` |
+| SKK 95 — the same desktop idea, Windows 95 | — | `win95/` |
 
 ## Layout
 

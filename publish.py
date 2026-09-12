@@ -4,20 +4,19 @@
 GitHub Pages can serve from the repo root or from /docs. Using /docs keeps
 the sources and the built output in one repo without them colliding.
 
-Beast is the site; the other designs stay reachable at their own paths.
+Beast is the only page published; the other designs remain as sources.
 Nothing copyrighted is copied — wallpaper.* is deliberately excluded, so a
-deployed BEast falls back to its drawn wallpaper.
+deployed Beast falls back to its drawn wallpaper.
 """
 import os, re, shutil
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(ROOT, "docs")
 
+# Only Beast is deployed. The other designs stay in the repo as sources —
+# add them back here to publish them again.
 PAGES = [
-    ("win11/index.html",    "index.html"),        # Beast — the site
-    ("index.html",          "annotated/index.html"),
-    ("magazine/index.html", "magazine/index.html"),
-    ("win95/index.html",    "win95/index.html"),
+    ("win11/index.html", "index.html"),   # Beast — the site
 ]
 
 def deployable(html):
