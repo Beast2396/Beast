@@ -192,7 +192,8 @@
     return '<a class="toc-row" href="' + esc(field.href) + '"' + ext + '>' + inner + '</a>';
   }
   $('#toc').innerHTML =
-    toc('LinkedIn', O.linkedin) + toc('Email', O.email) + toc('GitHub', O.github) +
+    toc('LinkedIn', O.linkedin) + toc('Email', O.email) + toc('Phone', O.phone) +
+    toc('GitHub', O.github) +
     toc('Résumé', O.resume) + toc('Based in', O.location);
 
   $('#foot').innerHTML =

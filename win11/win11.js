@@ -171,6 +171,12 @@
       '<stop offset="0" stop-color="#3FA0F0"/><stop offset="1" stop-color="#1652B8"/></linearGradient></defs>' +
       '<rect x="3" y="7" width="26" height="18" rx="3" fill="url(#gm)"/>' +
       '<path d="M4.5 9.5 16 18l11.5-8.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>',
+    phone:
+      '<defs><linearGradient id="gph" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0" stop-color="#5BD07A"/><stop offset="1" stop-color="#128A46"/></linearGradient></defs>' +
+      '<rect x="9" y="2.5" width="14" height="27" rx="3.2" fill="url(#gph)"/>' +
+      '<rect x="11" y="6" width="10" height="17" rx="1.4" fill="#0B3F23" opacity=".5"/>' +
+      '<circle cx="16" cy="26" r="1.5" fill="#fff" opacity=".9"/>',
     pc:
       '<defs><linearGradient id="gpc" x1="0" y1="0" x2="1" y2="1">' +
       '<stop offset="0" stop-color="#5C6672"/><stop offset="1" stop-color="#2B333C"/></linearGradient></defs>' +
@@ -273,7 +279,8 @@
     }
     return '<div class="doc"><h2>Contact</h2>' +
       '<p class="sub">Open to security internships and new-grad roles.</p>' +
-      '<div class="rows">' + row('mail', 'Email', O.email) + row('link', 'LinkedIn', O.linkedin) +
+      '<div class="rows">' + row('mail', 'Email', O.email) +
+      row('phone', 'Phone', O.phone) + row('link', 'LinkedIn', O.linkedin) +
       row('link', 'GitHub', O.github) + row('doc', 'Résumé', O.resume) +
       row('pc', 'Based in', O.location) + '</div></div>';
   }

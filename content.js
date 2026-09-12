@@ -19,6 +19,7 @@ window.SITE = {
     location: { text: 'College Park, Maryland' },
     email: { text: 'srinivaskoushikkodukula25@gmail.com',
              href: 'mailto:srinivaskoushikkodukula25@gmail.com' },
+    phone: { text: '+1 (202) 341-9800', href: 'tel:+12023419800' },
     resume: { text: 'Download PDF', href: 'https://beast2396.github.io/Beast/resume.pdf' },
     github: { text: 'github.com/Beast2396', href: 'https://github.com/Beast2396' },
     linkedin: {

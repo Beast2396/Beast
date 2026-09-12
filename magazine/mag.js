@@ -143,7 +143,8 @@
     return '<a class="contact-row" href="' + esc(f.href) + '"' + ext + '>' + inner + '</a>';
   }
   $('#contact-list').innerHTML =
-    row('Email', O.email) + row('LinkedIn', O.linkedin) + row('GitHub', O.github) +
+    row('Email', O.email) + row('Phone', O.phone) + row('LinkedIn', O.linkedin) +
+    row('GitHub', O.github) +
     row('Résumé', O.resume) + row('Based in', O.location);
 
   $('#imprint').innerHTML = [

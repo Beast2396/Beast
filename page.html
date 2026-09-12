@@ -391,6 +391,7 @@ window.SITE = {
     location: { text: 'College Park, Maryland' },
     email: { text: 'srinivaskoushikkodukula25@gmail.com',
              href: 'mailto:srinivaskoushikkodukula25@gmail.com' },
+    phone: { text: '+1 (202) 341-9800', href: 'tel:+12023419800' },
     resume: { text: 'Download PDF', href: 'https://beast2396.github.io/Beast/resume.pdf' },
     github: { text: 'github.com/Beast2396', href: 'https://github.com/Beast2396' },
     linkedin: {
@@ -757,7 +758,8 @@ window.SITE = {
     return '<a class="toc-row" href="' + esc(field.href) + '"' + ext + '>' + inner + '</a>';
   }
   $('#toc').innerHTML =
-    toc('LinkedIn', O.linkedin) + toc('Email', O.email) + toc('GitHub', O.github) +
+    toc('LinkedIn', O.linkedin) + toc('Email', O.email) + toc('Phone', O.phone) +
+    toc('GitHub', O.github) +
     toc('Résumé', O.resume) + toc('Based in', O.location);
 
   $('#foot').innerHTML =

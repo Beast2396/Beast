@@ -54,6 +54,10 @@
     mail:
       '<rect x="3" y="7" width="26" height="18" fill="#fff" stroke="#000"/>' +
       '<path d="M3 7l13 10L29 7" fill="none" stroke="#000"/>',
+    phone:
+      '<rect x="10" y="2" width="12" height="28" fill="#C0C0C0" stroke="#000"/>' +
+      '<rect x="12" y="5" width="8" height="16" fill="#008080" stroke="#000"/>' +
+      '<rect x="14" y="24" width="4" height="3" fill="#808080" stroke="#000"/>',
     globe:
       '<circle cx="16" cy="16" r="13" fill="#2E8BD6" stroke="#000"/>' +
       '<path d="M3 16h26M16 3c5 6 5 20 0 26M16 3c-5 6-5 20 0 26" fill="none" stroke="#fff" stroke-width="1.1"/>' +
@@ -168,6 +172,7 @@
       '<p class="sub">Open to security internships and new-grad roles.</p>' +
       '<span class="rule"></span><div class="rows">' +
       row('mail', 'Email', O.email) +
+      row('phone', 'Phone', O.phone) +
       row('globe', 'LinkedIn', O.linkedin) +
       row('globe', 'GitHub', O.github) +
       row('doc', 'Résumé', O.resume) +
