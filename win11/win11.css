@@ -1,0 +1,431 @@
+/* ══════════════════════════════════════════════════════════════════════
+   BEast — the portfolio as a Windows 11 desktop.
+
+   Chrome follows the Fluent design language: 8px window radii, Mica-style
+   translucent surfaces, a centred taskbar with a sliding active indicator,
+   Fluent caption buttons, and a floating Start panel with a pinned grid.
+
+   Wallpaper: a local wallpaper.jpg/.png/.webp is used if present, painted
+   by the compositor at native quality; otherwise one is drawn to canvas —
+   near-black with a sodium bloom, film grain and faint terminal noise. The
+   accent is taken from it, the way Windows picks one from your wallpaper.
+
+   Every chrome dimension is a token in :root; the device ladder near the
+   bottom of this file rewrites only those, so the interface scales as a
+   whole from a phone to a 4K display.
+   ══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --accent:      #E8443F;
+  --accent-soft: rgba(232, 68, 63, .16);
+  --accent-line: rgba(232, 68, 63, .55);
+
+  --mica:      rgba(32, 32, 34, .78);
+  --mica-2:    rgba(43, 43, 46, .82);
+  --solid:     #202022;
+  --solid-2:   #2B2B2E;
+  --stroke:    rgba(255, 255, 255, .085);
+  --stroke-2:  rgba(255, 255, 255, .055);
+  --hover:     rgba(255, 255, 255, .06);
+  --press:     rgba(255, 255, 255, .03);
+
+  --text:   #FFFFFF;
+  --text-2: rgba(255, 255, 255, .74);
+  --text-3: rgba(255, 255, 255, .46);
+
+  --ui: 'Segoe UI Variable Display', 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'Cascadia Code', 'Consolas', ui-monospace, 'IBM Plex Mono', monospace;
+
+  --r-win: 8px;
+  --r-panel: 8px;
+  --r-btn: 5px;
+  /* chrome scale — every breakpoint below only rewrites these */
+  --taskbar: 72px;
+  --tb-size: 60px;      /* dock button */
+  --tb-ico: 36px;       /* dock icon */
+  --di-w: 112px;        /* desktop icon cell */
+  --di-ico: 50px;
+  --di-fs: 13.5px;
+  --tt-h: 38px;         /* title bar */
+  --tt-fs: 13.5px;
+  --cap-w: 50px;
+  --fs: 15.5px;
+  --h2: 26px;
+  --pad-win: 22px;
+
+  --shadow-win: 0 32px 64px rgba(0,0,0,.55), 0 2px 12px rgba(0,0,0,.45);
+  --shadow-panel: 0 24px 60px rgba(0,0,0,.6);
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+body {
+  margin: 0; overflow: hidden;
+  background: #0A0A0C;
+  color: var(--text);
+  font-family: var(--ui);
+  font-size: var(--fs); line-height: 1.52; font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+h1, h2, h3, h4 { margin: 0; font-weight: 700; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: default; }
+::selection { background: var(--accent-soft); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 8px; border: 4px solid transparent; background-clip: content-box; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.3); background-clip: content-box; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ── wallpaper ───────────────────────────────────────────────────────── */
+#wall { position: fixed; inset: 0; z-index: 0; display: block; }
+/* a supplied image is painted by the compositor at native quality rather
+   than resampled through canvas */
+#wall-photo {
+  position: fixed; inset: 0; z-index: 0; display: none;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  image-rendering: auto;
+}
+#wall-photo.on { display: block; }
+#wall-photo.on ~ #wall { display: none; }
+#vignette {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(130% 100% at 50% 45%, transparent 55%, rgba(0,0,0,.38) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.20), transparent 18%, transparent 78%, rgba(0,0,0,.34));
+}
+
+/* ── desktop ─────────────────────────────────────────────────────────── */
+#desktop { position: fixed; inset: 0 0 var(--taskbar) 0; z-index: 2; }
+
+#icons {
+  position: absolute; top: 14px; left: 14px;
+  display: flex; flex-direction: column; flex-wrap: wrap;
+  align-content: flex-start; gap: 2px;
+  max-height: calc(100% - 28px);
+}
+.dicon {
+  width: var(--di-w); padding: 12px 6px 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  text-align: center; border-radius: 6px;
+  transition: background-color .12s var(--ease);
+}
+.dicon:hover { background: rgba(255,255,255,.07); }
+.dicon:active { background: rgba(255,255,255,.04); }
+.dicon svg { width: var(--di-ico); height: var(--di-ico); flex: none; filter: drop-shadow(0 3px 6px rgba(0,0,0,.65)); }
+.dicon span { font-size: var(--di-fs); font-weight: 700; line-height: 1.3; color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,1), 0 2px 8px rgba(0,0,0,.85); }
+
+/* ── windows ─────────────────────────────────────────────────────────── */
+.win {
+  position: absolute; display: flex; flex-direction: column;
+  min-width: 280px; min-height: 180px;
+  background: var(--mica);
+  backdrop-filter: blur(40px) saturate(140%);
+  -webkit-backdrop-filter: blur(40px) saturate(140%);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-win);
+  box-shadow: var(--shadow-win);
+  overflow: hidden;
+}
+.win[hidden] { display: none; }
+.win.blur { box-shadow: 0 16px 40px rgba(0,0,0,.4); border-color: var(--stroke-2); }
+
+.titlebar { height: var(--tt-h); flex: none; display: flex; align-items: center; padding-left: 12px; }
+.titlebar svg { width: 19px; height: 19px; flex: none; }
+.titlebar .t { font-size: var(--tt-fs); font-weight: 700; color: var(--text-2); margin-left: 10px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.win.blur .titlebar .t { color: var(--text-3); }
+.caps { display: flex; height: 100%; }
+.cap {
+  width: var(--cap-w); height: var(--tt-h); display: grid; place-items: center;
+  color: var(--text-2); transition: background-color .1s linear;
+}
+.cap:hover { background: var(--hover); color: #fff; }
+.cap.x:hover { background: #C42B1C; color: #fff; }
+.cap svg { width: 11px; height: 11px; }
+
+.winbody { flex: 1; min-height: 0; overflow: auto; padding: 4px var(--pad-win) var(--pad-win); user-select: text; }
+.winbody.pad0 { padding: 0 14px 14px; }
+
+.statusbar {
+  flex: none; height: 34px; display: flex; align-items: center; gap: 14px;
+  padding: 0 16px; border-top: 1px solid var(--stroke-2);
+  font-size: 12.5px; font-weight: 600; color: var(--text-3);
+}
+.statusbar .sp { margin-left: auto; }
+
+/* ── document typography ─────────────────────────────────────────────── */
+.doc h2 { font-size: var(--h2); font-weight: 700; letter-spacing: -0.01em; }
+.doc .sub { color: var(--text-3); font-size: 13.5px; font-weight: 600; margin-top: 3px; }
+.doc h3 { font-size: 17px; font-weight: 700; margin-top: 20px; color: var(--text); }
+.doc p { color: var(--text-2); margin-top: 9px; max-width: 60ch; font-size: var(--fs); font-weight: 500; }
+.doc .sep { height: 1px; background: var(--stroke); margin: 18px 0; }
+.doc dl { display: grid; grid-template-columns: 148px 1fr; gap: 8px 16px; margin-top: 12px; }
+.doc dt { color: var(--text-3); font-size: 13.5px; font-weight: 600; }
+.doc dd { margin: 0; color: var(--text-2); font-weight: 500; }
+.doc dd b { color: var(--text); font-weight: 600; }
+.doc ul.bul { margin-top: 6px; display: flex; flex-direction: column; gap: 5px; }
+.doc ul.bul li { color: var(--text-2); font-size: 14.5px; font-weight: 500; }
+.doc ul.bul li::before { content: "·"; color: var(--accent); margin-right: 8px; }
+.doc .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.doc .chips li {
+  padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-2);
+  background: rgba(255,255,255,.05); border: 1px solid var(--stroke);
+}
+.doc .callout {
+  margin-top: 16px; padding: 12px 14px; border-radius: 6px;
+  background: var(--accent-soft); border: 1px solid var(--accent-line);
+  color: var(--text); font-size: 15px; font-weight: 600;
+}
+
+/* folder grid */
+.grid { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 10px; }
+.gitem {
+  width: 146px; padding: 16px 8px; border-radius: 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+  transition: background-color .12s var(--ease);
+}
+.gitem:hover { background: var(--hover); }
+.gitem svg { width: 46px; height: 46px; }
+.gitem b { font-size: 15px; font-weight: 700; }
+.gitem small { font-size: 12.5px; font-weight: 600; color: var(--text-3); line-height: 1.3; }
+
+/* list rows */
+.rows { display: flex; flex-direction: column; gap: 2px; padding-top: 8px; }
+.row {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 6px;
+  transition: background-color .12s var(--ease);
+}
+.row:hover { background: var(--hover); }
+.row svg { width: 22px; height: 22px; flex: none; }
+.row .k { min-width: 96px; font-size: 13.5px; font-weight: 700; color: var(--text-3); }
+.row .v { color: var(--text); font-size: 15.5px; font-weight: 600; }
+.row .go { margin-left: auto; color: var(--text-3); font-size: 12px; }
+
+/* ── taskbar ─────────────────────────────────────────────────────────── */
+#taskbar {
+  position: fixed; left: 0; right: 0; bottom: 0; height: var(--taskbar); z-index: 9000;
+  display: flex; align-items: center; padding: 0 12px;
+  background: rgba(22, 22, 24, .72);
+  backdrop-filter: blur(36px) saturate(150%);
+  -webkit-backdrop-filter: blur(36px) saturate(150%);
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+#tb-center {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 8px;
+}
+.tb {
+  position: relative; width: var(--tb-size); height: var(--tb-size); border-radius: 8px;
+  display: grid; place-items: center;
+  transition: background-color .12s var(--ease);
+}
+.tb:hover { background: rgba(255,255,255,.08); }
+.tb:active { background: rgba(255,255,255,.04); }
+.tb.on { background: rgba(255,255,255,.09); }
+.tb svg { width: var(--tb-ico); height: var(--tb-ico); }
+.tb::after {
+  content: ""; position: absolute; bottom: 3px; left: 50%; translate: -50% 0;
+  height: 3.5px; width: 0; border-radius: 2px; background: var(--accent);
+  transition: width .2s var(--ease), opacity .2s var(--ease);
+  opacity: 0;
+}
+.tb.open::after { width: 8px; opacity: .75; }
+.tb.on::after { width: 22px; opacity: 1; }
+
+#tray {
+  margin-left: auto;
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+  padding: 7px 18px; border-radius: 8px; font-size: 14.5px; font-weight: 700; color: var(--text-2);
+  line-height: 1.3; font-variant-numeric: tabular-nums;
+  transition: background-color .12s var(--ease);
+}
+#tray:hover { background: rgba(255,255,255,.07); }
+#tray b { display: block; font-weight: 400; }
+
+/* ── start panel ─────────────────────────────────────────────────────── */
+#start {
+  position: fixed; left: 50%; translate: -50% 0; bottom: calc(var(--taskbar) + 10px);
+  width: min(640px, 94vw); max-height: min(660px, calc(100vh - var(--taskbar) - 24px));
+  z-index: 9100; display: flex; flex-direction: column;
+  background: var(--mica-2);
+  backdrop-filter: blur(48px) saturate(150%);
+  -webkit-backdrop-filter: blur(48px) saturate(150%);
+  border: 1px solid var(--stroke);
+  border-radius: var(--r-panel);
+  box-shadow: var(--shadow-panel);
+  padding: 24px 24px 0;
+  transform-origin: bottom center;
+  animation: startin .22s var(--ease);
+}
+#start[hidden] { display: none; }
+@keyframes startin { from { opacity: 0; translate: -50% 14px; scale: .98; } to { opacity: 1; translate: -50% 0; scale: 1; } }
+
+.searchbox {
+  display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+  border-radius: 999px; background: rgba(0,0,0,.28); border: 1px solid var(--stroke);
+  color: var(--text-3); font-size: 14.5px; font-weight: 600;
+}
+.searchbox svg { width: 15px; height: 15px; }
+
+.start-head { display: flex; align-items: center; justify-content: space-between; margin: 22px 0 12px; }
+.start-head b { font-size: 15px; font-weight: 700; }
+.pinned { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+@media (max-width: 560px) { .pinned { grid-template-columns: repeat(4, 1fr); } }
+.pin {
+  padding: 14px 6px 10px; border-radius: 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+  transition: background-color .12s var(--ease);
+}
+.pin:hover { background: var(--hover); }
+.pin svg { width: 42px; height: 42px; }
+.pin span { font-size: 12.5px; font-weight: 700; line-height: 1.25; color: var(--text-2); }
+
+.reco { display: flex; flex-direction: column; gap: 2px; margin-bottom: 18px; }
+.reco a, .reco button {
+  display: flex; align-items: center; gap: 12px; padding: 9px 10px; border-radius: 6px; text-align: left;
+  transition: background-color .12s var(--ease);
+}
+.reco a:hover, .reco button:hover { background: var(--hover); }
+.reco svg { width: 32px; height: 32px; flex: none; }
+.reco b { display: block; font-size: 14.5px; font-weight: 700; }
+.reco small { display: block; font-size: 12.5px; font-weight: 500; color: var(--text-3); }
+
+.start-foot {
+  margin: 0 -24px; padding: 12px 24px;
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,.035); border-top: 1px solid var(--stroke-2);
+}
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  background: linear-gradient(140deg, var(--accent), #7A1F1D); color: #fff; font-size: 15px; font-weight: 700;
+}
+.start-foot .nm { font-size: 15px; font-weight: 700; }
+.start-foot .pw { margin-left: auto; width: 34px; height: 34px; border-radius: var(--r-btn); display: grid; place-items: center; color: var(--text-2); }
+.start-foot .pw:hover { background: var(--hover); }
+.start-foot .pw svg { width: 16px; height: 16px; }
+
+/* ── dialog ──────────────────────────────────────────────────────────── */
+#modal { position: fixed; inset: 0; z-index: 9500; display: grid; place-items: center; background: rgba(0,0,0,.4); }
+#modal[hidden] { display: none; }
+.dlg {
+  width: min(400px, 92vw); border-radius: var(--r-win); overflow: hidden;
+  background: var(--solid); border: 1px solid var(--stroke); box-shadow: var(--shadow-panel);
+}
+.dlg-h { padding: 20px 24px 4px; font-size: 19px; font-weight: 600; }
+.dlg-b { padding: 4px 24px 22px; color: var(--text-2); font-size: 13.5px; }
+.dlg-f { display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px; background: rgba(255,255,255,.03); border-top: 1px solid var(--stroke-2); }
+.btn {
+  padding: 7px 22px; border-radius: var(--r-btn); font-size: 13px;
+  background: rgba(255,255,255,.07); border: 1px solid var(--stroke);
+}
+.btn:hover { background: rgba(255,255,255,.1); }
+.btn.pri { background: var(--accent); border-color: transparent; color: #fff; }
+.btn.pri:hover { filter: brightness(1.08); }
+
+/* ══ device ladder ═══════════════════════════════════════════════════
+   Each block rewrites only the scale tokens, so the whole interface
+   resizes coherently instead of individual parts drifting apart. */
+
+/* large desktop / 4K — the chrome grows so it doesn't look miniature */
+@media (min-width: 1800px) {
+  :root {
+    --taskbar: 84px; --tb-size: 68px; --tb-ico: 42px;
+    --di-w: 128px; --di-ico: 58px; --di-fs: 15px;
+    --tt-h: 42px; --tt-fs: 15px; --cap-w: 56px;
+    --fs: 17px; --h2: 30px; --pad-win: 28px;
+  }
+}
+
+/* small laptop */
+@media (max-width: 1200px) {
+  :root {
+    --taskbar: 64px; --tb-size: 54px; --tb-ico: 32px;
+    --di-w: 102px; --di-ico: 44px; --di-fs: 13px;
+    --tt-h: 36px; --tt-fs: 13px; --cap-w: 46px;
+    --fs: 15px; --h2: 24px; --pad-win: 20px;
+  }
+}
+
+/* tablet */
+@media (max-width: 900px) {
+  :root {
+    --taskbar: 60px; --tb-size: 50px; --tb-ico: 30px;
+    --di-w: 94px; --di-ico: 42px; --di-fs: 12.5px;
+    --fs: 15px; --h2: 23px; --pad-win: 18px;
+  }
+  #start { width: min(560px, 94vw); padding: 20px 20px 0; }
+  .pinned { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* phone — the desktop metaphor stops being useful, so windows become
+   full-screen sheets and the dock keeps only what is tappable */
+@media (max-width: 700px) {
+  :root {
+    --taskbar: 58px; --tb-size: 46px; --tb-ico: 27px;
+    --di-w: 88px; --di-ico: 40px; --di-fs: 12.5px;
+    --tt-h: 44px; --tt-fs: 14px; --cap-w: 48px;
+    --fs: 15px; --h2: 22px; --pad-win: 16px;
+  }
+  .win {
+    left: 8px !important; right: 8px; width: auto !important;
+    top: 8px !important; height: calc(100% - 16px) !important;
+    border-radius: 10px;
+  }
+  .titlebar { padding-left: 14px; }
+  #icons { gap: 0; }
+  #tray { display: none; }
+  #tb-center { gap: 4px; }
+  .gitem { width: calc(50% - 4px); }
+  .doc dl { grid-template-columns: 1fr; gap: 2px 0; }
+  .doc dt { margin-top: 8px; }
+  .row .k { min-width: 0; }
+  .row { flex-wrap: wrap; }
+  .start-foot { margin: 0 -20px; padding: 12px 20px; }
+}
+
+/* short viewports — keep the whole icon column in one run rather than
+   letting it wrap into a second column the windows would sit on top of */
+@media (max-height: 820px) {
+  :root { --di-ico: 42px; }
+  .dicon { padding: 8px 6px 7px; gap: 5px; }
+}
+
+/* very short viewports — landscape phones, split-screen */
+@media (max-height: 620px) {
+  :root { --taskbar: 52px; --tb-size: 44px; --tb-ico: 26px; --di-ico: 38px; --di-w: 88px; }
+  #start { max-height: calc(100vh - var(--taskbar) - 12px); overflow-y: auto; }
+}
+
+/* touch — hover states mean nothing, and targets need room */
+@media (pointer: coarse) {
+  .cap { width: 52px; }
+  .dicon { padding: 14px 6px 12px; }
+  .row, .gitem, .pin, .reco a, .reco button { min-height: 48px; }
+  .dicon:hover, .tb:hover, .row:hover, .gitem:hover, .pin:hover { background: transparent; }
+  .dicon:active, .tb:active, .row:active, .gitem:active, .pin:active { background: rgba(255,255,255,.12); }
+}
+
+/* the translucency is expensive and some people ask for less of it */
+@media (prefers-reduced-transparency: reduce) {
+  .win, #start, #taskbar {
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+  }
+  .win { background: #1C1C1F; }
+  #start { background: #232326; }
+  #taskbar { background: #141416; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #start { animation: none; }
+  * { transition-duration: .001ms !important; }
+}

@@ -1,0 +1,9 @@
+# local-only wallpapers — do not commit or deploy (third-party imagery)
+wallpaper.jpg
+wallpaper.png
+wallpaper.webp
+
+# scratch
+__pycache__/
+*.pyc
+.venv/
