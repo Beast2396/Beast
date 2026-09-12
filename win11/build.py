@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Assemble the BEast desktop from win11.css + ../content.js + win11.js."""
+"""Assemble the Beast desktop from win11.css + ../content.js + win11.js."""
 import os
 
-SHELL = "BEast"          # the desktop's name, shown in titles and status bars
+SHELL = "Beast"          # the desktop's name, shown in titles and status bars
 
 CSS = open("win11.css", encoding="utf-8").read()
 CONTENT = open("../content.js", encoding="utf-8").read()

@@ -3,7 +3,7 @@
 Application security · cloud security · offensive security.
 Cybersecurity MEng candidate at the University of Maryland.
 
-**Live:** https://Beast2396.github.io/portfolio/
+**Live:** https://beast2396.github.io/Beast/
 
 ## Designs
 
@@ -11,7 +11,7 @@ All four read from a single `content.js`, so a fact is edited once.
 
 | Path | Design |
 | --- | --- |
-| `/` | **BEast** — the portfolio as a Windows 11 desktop |
+| `/` | **Beast** — the portfolio as a Windows 11 desktop |
 | `/annotated/` | Editorial margin rails and hairlines |
 | `/magazine/` | *The AppSec File* — a technical journal issue |
 | `/win95/` | The same desktop idea, Windows 95 |
@@ -20,7 +20,7 @@ All four read from a single `content.js`, so a fact is edited once.
 
 ```
 content.js              every fact on every page
-win11/                  BEast          — win11.css, win11.js, build.py
+win11/                  Beast          — win11.css, win11.js, build.py
 magazine/               The AppSec File
 win95/                  SKK 95
 site.css site.js        Annotated (project root)

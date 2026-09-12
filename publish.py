@@ -4,7 +4,7 @@
 GitHub Pages can serve from the repo root or from /docs. Using /docs keeps
 the sources and the built output in one repo without them colliding.
 
-BEast is the site; the other designs stay reachable at their own paths.
+Beast is the site; the other designs stay reachable at their own paths.
 Nothing copyrighted is copied — wallpaper.* is deliberately excluded, so a
 deployed BEast falls back to its drawn wallpaper.
 """
@@ -14,7 +14,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(ROOT, "docs")
 
 PAGES = [
-    ("win11/index.html",    "index.html"),        # BEast — the site
+    ("win11/index.html",    "index.html"),        # Beast — the site
     ("index.html",          "annotated/index.html"),
     ("magazine/index.html", "magazine/index.html"),
     ("win95/index.html",    "win95/index.html"),
